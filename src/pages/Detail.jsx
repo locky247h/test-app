@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { posts } from '../data/posts';
 
-export const Home = () => {
-  
+export const Detail = () => {
+  const { id } = useParams();
+  const post = posts.find((p) => p.id === Number(id));
+
+  if (!post) return <div>記事が見つかりません</div>;
+
   return (
     <div className="py-8">
       <div className="max-w-[800px] mx-auto">
-        <ul>
-          {posts.map((post) => (
+        <img src={post.thumbnailUrl} alt="" />
+          <ul>
             <li key={post.id}>
-              <Link to={`/posts/${post.id}`} className="block mb-8 border-4 border-gray-300 p-4">
-                <div className="flex justify-between pb-3">
+              <Link to={`/posts/${post.id}`} className="">
+                <div className="flex justify-between pb-3 mt-4">
                   <div className="text-xs">
                     {new Date(post.createdAt).toLocaleDateString()}
                   </div>
@@ -29,16 +33,14 @@ export const Home = () => {
                     {post.title}
                 </div>
                 <div 
-                  className="line-clamp-2 w-120 py-3" 
+                  className="py-4" 
                   dangerouslySetInnerHTML={{ __html: post.content }}
                   >
                 </div>
               </Link>
             </li>
-          ))}
         </ul>
       </div>
     </div>
   );
 };
-
