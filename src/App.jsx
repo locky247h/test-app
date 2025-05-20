@@ -2,7 +2,7 @@ import React from 'react'
 import { Detail } from './pages/Detail'
 import { Header } from './components/Header'
 import { Home } from './pages/Home';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
@@ -16,4 +16,4 @@ function App() {
   );
 };
 
-export default App
+export default App;
