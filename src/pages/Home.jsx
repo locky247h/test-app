@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { posts } from '../data/posts';
 
-export const Home = ({ src }) => {
+export const Home = () => {
   
   return (
     <div className="py-8">
       <div className="max-w-[800px] mx-auto">
         <ul>
-          {src.map((post) => (
+          {posts.map((post) => (
             <li key={post.id}>
               <Link to={`/posts/${post.id}`} className="block mb-8 border-4 border-gray-300 p-4">
                 <div className="flex justify-between pb-3">
