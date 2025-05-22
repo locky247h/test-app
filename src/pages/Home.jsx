@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { posts } from '../data/posts';
 
 export const Home = () => {
-  
-  return (
+
+  const [posts, setPosts] = useState([])
+
+  // APIでpostsを取得する処理をuseEffectで実行します。
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts`)
+      const data = await res.json()
+      setPosts(data.posts)
+    }
+
+    fetcher()
+  }, [])
+
+    return (
     <div className="py-8">
       <div className="max-w-[800px] mx-auto">
         <ul>
