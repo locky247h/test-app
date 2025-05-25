@@ -3,20 +3,29 @@ import { useParams } from 'react-router-dom';
 
 export const Detail = () => {
   const { id } = useParams();
-  const [post, setPost] = useState(null)
+  const [post, setPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`)
-      const data = await res.json()
-      setPost(data.post)
+      setIsLoading(true);
+      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`);
+      const data = await res.json();
+      setPost(data.post);
+      setIsLoading(false);
     }
 
-    fetcher()
+    fetcher();
   }, [id])
 
-  if (!post) return <div>記事が見つかりません</div>;
+  if (isLoading) {
+    return <div className="text-center py-8">読み込み中です...</div>;
+  }
+
+  if (!post) {
+    return <div className="text-center py-8">記事が見つかりません</div>;
+  }
 
   return (
     <div className="py-8">
