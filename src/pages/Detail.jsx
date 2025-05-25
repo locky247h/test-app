@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { posts } from '../data/posts';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 export const Detail = () => {
   const { id } = useParams();
-  const post = posts.find((p) => p.id === Number(id));
+  const [post, setPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (!post) return <div>記事が見つかりません</div>;
+  // APIでpostsを取得する処理をuseEffectで実行します。
+  useEffect(() => {
+    const fetcher = async () => {
+      setIsLoading(true);
+      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`);
+      const data = await res.json();
+      setPost(data.post);
+      setIsLoading(false);
+    }
+
+    fetcher();
+  }, [id])
+
+  if (isLoading) {
+    return <div className="text-center py-8">読み込み中です...</div>;
+  }
+
+  if (!post) {
+    return <div className="text-center py-8">記事が見つかりません</div>;
+  }
 
   return (
     <div className="py-8">
