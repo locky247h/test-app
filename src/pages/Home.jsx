@@ -2,19 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const Home = () => {
-
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts`)
-      const data = await res.json()
-      setPosts(data.posts)
+      setIsLoading(true);
+      const res = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts`);
+      const data = await res.json();
+      setPosts(data.posts);
+      setIsLoading(false);
     }
 
     fetcher()
   }, [])
+
+  if (isLoading) {
+    return <div className="text-center py-8">読み込み中です...</div>;
+  }
 
     return (
     <div className="py-8">
