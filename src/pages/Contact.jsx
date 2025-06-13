@@ -11,6 +11,9 @@ export const Contact = () => {
   const [emailError, setEmailError] = useState('');
   const [messageError, setMessageError] = useState('');
 
+  //送信状態管理
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const valid = () => {
     let isValid = true;
 
@@ -57,6 +60,8 @@ export const Contact = () => {
     e.preventDefault();
   
     if (!valid()) return;
+
+    setIsSubmitting(true);  //送信中フラグON
   
     try {
       const res = await fetch("https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/contacts", {
@@ -76,6 +81,8 @@ export const Contact = () => {
     } catch (error) {
       console.error("送信に失敗しました", error);
       alert("送信に失敗しました。もう一度お試しください。");
+    } finally {
+      setIsSubmitting(false);   //送信完了でOFFに戻す
     }
   };
 
@@ -93,6 +100,7 @@ export const Contact = () => {
             className="w-full border p-2 rounded-md"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={isSubmitting}
           /> 
           {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
         </div> 
@@ -107,6 +115,7 @@ export const Contact = () => {
           className="w-full border p-2 rounded-md"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={isSubmitting}
           />
           {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
         </div>
@@ -121,6 +130,7 @@ export const Contact = () => {
             rows={5}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            disabled={isSubmitting}
           />
           {messageError && <p className="text-red-500 text-sm mt-1">{messageError}</p>}
         </div>
@@ -131,8 +141,9 @@ export const Contact = () => {
         <button
           type="submit"
           className="bg-black text-white px-4 py-2 rounded-md"
+          disabled={isSubmitting}
         >
-          送信
+          {isSubmitting ? "送信中..." : "送信"}
         </button>
         <button
         type="button"
@@ -142,6 +153,7 @@ export const Contact = () => {
           setEmail('');
           setMessage('');
         }}
+        disabled={isSubmitting}
         >
           クリア
         </button>
